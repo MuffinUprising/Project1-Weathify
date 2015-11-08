@@ -92,7 +92,7 @@ public class WeathifyManagerActivity extends AppCompatActivity implements
     public void launchSpotifyPlayer(String currentCondition) {
 
         try {
-            String spotifyPlaylists = getSpotifyPlaylists();
+            String spotifyPlaylists = getSpotifyPlaylists(R.raw.spotifyplaylists);
             JSONObject playlists = new JSONObject(spotifyPlaylists);
             JSONObject spotifyplaylist = playlists.getJSONObject("spotifyplaylist");
             JSONObject weatherPlaylist = spotifyplaylist.getJSONObject(currentCondition);
@@ -138,6 +138,11 @@ public class WeathifyManagerActivity extends AppCompatActivity implements
         if (requestCode == REQUEST_CODE) {
             AuthenticationResponse response = AuthenticationClient.getResponse(resultCode, intent);
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
+
+                //TODO: create fragman and call SpotifyFragment
+                //TODO: move below code to SpotifyFragment
+
+
                 Config playerConfig = new Config(this, response.getAccessToken(), CLIENT_ID);
                 mSpotifyPlayer = Spotify.getPlayer(playerConfig, this, new Player.InitializationObserver() {
                     @Override
@@ -270,8 +275,8 @@ public class WeathifyManagerActivity extends AppCompatActivity implements
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 
-    private String getSpotifyPlaylists() {
-        InputStream playlistStream = getResources().openRawResource(R.raw.spotifyplaylists);
+    public static String getSpotifyPlaylists(int playlistID) {
+        InputStream playlistStream = getResources().openRawResource(playlistID);
         BufferedReader playlistStreamReader = new BufferedReader(new InputStreamReader(playlistStream));
 
         try {
